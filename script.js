@@ -2,7 +2,7 @@ const progress = document.getElementById("progress");
 const song = document.getElementById("song");
 const ctrlIcon = document.getElementById("ctrlIcon");
 
-song.onloadeddata = function () {
+song.onloadedmetadata = function () {
   progress.max = song.duration;
   progress.value = song.currentTime;
 };
