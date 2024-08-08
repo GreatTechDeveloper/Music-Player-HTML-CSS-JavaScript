@@ -2,11 +2,18 @@ const progress = document.getElementById("progress");
 const song = document.getElementById("song");
 const ctrlIcon = document.getElementById("ctrlIcon");
 
+// تنظیم مقدار اولیه نوار پیشرفت
 song.onloadedmetadata = function () {
   progress.max = song.duration;
   progress.value = song.currentTime;
 };
 
+// به‌روزرسانی نوار پیشرفت در حین پخش
+song.ontimeupdate = function () {
+  progress.value = song.currentTime;
+};
+
+// پخش/موقف کردن صدا
 function playPause() {
   if (ctrlIcon.classList.contains("fa-pause")) {
     song.pause();
@@ -19,19 +26,18 @@ function playPause() {
   }
 }
 
-if (song.play()) {
-  setInterval(() => {
-    progress.value = song.currentTime;
-  }, 500);
-}
-
-progress.onchange = function () {
-  song.play();
+// تغییر موقعیت پخش بر اساس نوار پیشرفت
+progress.oninput = function () {
   song.currentTime = progress.value;
-  ctrlIcon.classList.add("fa-pause");
-  ctrlIcon.classList.remove("fa-play");
+  // پخش صدا فقط اگر در حال حاضر پخش است
+  if (!song.paused) {
+    song.play();
+    ctrlIcon.classList.add("fa-pause");
+    ctrlIcon.classList.remove("fa-play");
+  }
 };
 
+// حرکت به عقب و جلو
 function moveBack() {
   song.currentTime -= 5;
 }
